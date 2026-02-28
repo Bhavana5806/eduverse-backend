@@ -1,45 +1,51 @@
 #!/bin/bash
 
-echo "🚀 EduVerse AI - Railway Deployment Checklist"
-echo "=============================================="
+echo "🚀 EduVerse Backend - Railway Deployment Script"
+echo "================================================"
 echo ""
-echo "✅ Step 1: Initialize Git Repository"
-echo "   git init"
-echo "   git add ."
-echo "   git commit -m 'Initial commit - EduVerse AI Backend'"
+
+# Check if git is initialized
+if [ ! -d .git ]; then
+    echo "❌ Git not initialized. Initializing..."
+    git init
+    git branch -M main
+fi
+
+# Add all files
+echo "📦 Adding files to git..."
+git add .
+
+# Commit changes
+echo "💾 Committing changes..."
+read -p "Enter commit message (default: 'Deploy to Railway'): " commit_msg
+commit_msg=${commit_msg:-"Deploy to Railway"}
+git commit -m "$commit_msg"
+
+# Check if remote exists
+if ! git remote | grep -q origin; then
+    echo "🔗 No remote found."
+    read -p "Enter your GitHub repository URL: " repo_url
+    git remote add origin "$repo_url"
+fi
+
+# Push to GitHub
+echo "⬆️  Pushing to GitHub..."
+git push -u origin main
+
 echo ""
-echo "✅ Step 2: Create GitHub Repository"
-echo "   - Go to github.com/new"
-echo "   - Create repository: eduverse-backend"
-echo "   - Copy the repository URL"
+echo "✅ Code pushed to GitHub successfully!"
 echo ""
-echo "✅ Step 3: Push to GitHub"
-echo "   git remote add origin <your-repo-url>"
-echo "   git branch -M main"
-echo "   git push -u origin main"
-echo ""
-echo "✅ Step 4: Deploy on Railway"
-echo "   1. Visit: https://railway.app"
-echo "   2. Click 'New Project'"
-echo "   3. Select 'Deploy from GitHub repo'"
-echo "   4. Choose: eduverse-backend"
-echo ""
-echo "✅ Step 5: Add PostgreSQL Database"
-echo "   1. Click 'New' in Railway project"
-echo "   2. Select 'Database' → 'PostgreSQL'"
-echo "   3. Copy DATABASE_URL"
-echo ""
-echo "✅ Step 6: Configure Environment Variables"
-echo "   Add these in Railway Variables:"
+echo "📋 Next Steps:"
+echo "1. Go to https://railway.app"
+echo "2. Click 'New Project' → 'Deploy from GitHub repo'"
+echo "3. Select your repository"
+echo "4. Add PostgreSQL database"
+echo "5. Set environment variables:"
 echo "   - DATABASE_URL (from PostgreSQL service)"
-echo "   - SECRET_KEY (generate strong key)"
+echo "   - SECRET_KEY (generate with: python -c 'import secrets; print(secrets.token_urlsafe(32))')"
 echo "   - ALGORITHM=HS256"
 echo "   - ACCESS_TOKEN_EXPIRE_MINUTES=60"
+echo "   - GEMINI_API_KEY (your Google Gemini API key)"
+echo "6. Generate domain in Settings"
 echo ""
-echo "✅ Step 7: Generate Domain"
-echo "   Settings → Generate Domain"
-echo ""
-echo "✅ Step 8: Test Deployment"
-echo "   Visit: https://your-app.up.railway.app/health"
-echo ""
-echo "🎉 Deployment Complete!"
+echo "🎉 Your API will be live at: https://your-app.up.railway.app"

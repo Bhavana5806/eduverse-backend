@@ -1,4 +1,6 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
+from sqlalchemy.orm import Session
+from app.db.database import get_db
 from app.agents import ai_content_generator
 from pydantic import BaseModel
 from typing import List
