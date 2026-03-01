@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.db.database import Base, engine
 from app.api.routes import eduverse_routes, ai_routes
+from app.api import enhanced_routes
 import os
 
 app = FastAPI(
@@ -45,6 +46,7 @@ Base.metadata.create_all(bind=engine)
 
 app.include_router(eduverse_routes.router, prefix="/api/v1", tags=["EduVerse AI - All Engines"])
 app.include_router(ai_routes.router, prefix="/api/v1", tags=["AI Content Generation"])
+app.include_router(enhanced_routes.router, prefix="/api/v1", tags=["Enhanced API - All 10 Engines"])
 
 @app.get("/", tags=["Root"])
 def root():
